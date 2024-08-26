@@ -1,7 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 
-const dataFile = path.join(process.cwd(), 'data', 'tasks.json');
+const dataFile = 'tasks.json';
+console.log(dataFile);
 
 interface Task {
   id: number;
