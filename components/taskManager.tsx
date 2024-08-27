@@ -34,9 +34,14 @@ const TaskManager: React.FC = () => {
     addNewTask,
     updateTask,
     removeTask,
+    fetchTasks,
   } = useTasks();
 
   const tasks = useTasksStore((state) => state.tasks);
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
 
   const handleAddTask = async () => {
     if (!newTask.trim()) return;
