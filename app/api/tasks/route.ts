@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { listTasks, addTask, updateTask, removeTask } from '@/lib/taskManager';
+import { listTasks, addTask, updateTask, removeTask, getTasks } from '@/lib/taskManager';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -9,7 +9,7 @@ export async function GET(req: Request) {
   const filter = searchParams.get('filter');
   
   try {
-    const tasks = listTasks(filter);
+    const tasks = filter ? listTasks(filter) : getTasks();
     return NextResponse.json({ tasks });
   } catch (error) {
     console.error('Error listing tasks:', error);
@@ -21,7 +21,7 @@ export async function POST(req: Request) {
   const { message } = await req.json();
 
   try {
-    const tasks = listTasks();
+    const tasks = getTasks();
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
@@ -59,7 +59,7 @@ export async function POST(req: Request) {
       
       const newTask = addTask(suggestedTask, priority, dueDate);
       
-      const responseMessage = `Certainly! I've added the following task to your list: "${suggestedTask}" with priority ${priority}${dueDate ? ` and due date ${dueDate}` : ''}. Is there anything else you'd like me to do?`;
+      const responseMessage = `Certainly! I added the following task to your list: "${suggestedTask}" ${dueDate ? ` and due date ${dueDate}` : ''}. Is there anything else you'd like me to do?`;
       
       return NextResponse.json({
         message: responseMessage,
@@ -93,9 +93,6 @@ export async function PUT(req: Request) {
 
 export async function DELETE(req: Request) {
   const { searchParams } = new URL(req.url);
-  if(!searchParams.has('task_id')) {
-    return NextResponse.json({ error: 'Task ID is required' }, { status: 400 });
-  }
   if(!searchParams.has('task_id')) {
     return NextResponse.json({ error: 'Task ID is required' }, { status: 400 });
   }

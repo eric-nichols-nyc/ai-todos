@@ -20,8 +20,9 @@ test.describe('TaskManager', () => {
     
     // Add a new task
     await page.fill('input[placeholder="Enter a new task"]', 'New test task');
-    await page.click('button', { text: 'Add' });
-    
+    const button = page.locator('button', { hasText: 'Add' });
+    await button.click();    
+        
     // Wait for the new task to be added
     await page.waitForSelector(`li:nth-child(${initialTaskCount + 1})`);
     

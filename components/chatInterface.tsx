@@ -176,11 +176,6 @@ const ChatInterface: React.FC = () => {
               }`}
             >
               <p>{message.content}</p>
-              {message.suggestedTask && (
-                <p className="mt-2 text-sm font-semibold">
-                  Suggested Task: {message.suggestedTask}
-                </p>
-              )}
             </div>
           ))}
           {isLoading && (

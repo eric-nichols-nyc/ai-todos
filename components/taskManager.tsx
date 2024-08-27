@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
+import dynamic from 'next/dynamic';
 import {
   Card,
   CardHeader,
@@ -17,16 +18,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useTasks } from "@/hooks/useTasks";
-import { useTasksStore } from "@/store/task-store";
 import { Task } from "@/types";
-import TaskListItem from "./task-item";
+
+const TaskListItem = dynamic(() => import('./task-item'), { ssr: false });
 
 const TaskManager: React.FC = () => {
   const [newTask, setNewTask] = useState<string>("");
-  const [newPriority, setNewPriority] = useState<"high" | "medium" | "low">(
-    "medium"
-  );
+  const [newPriority, setNewPriority] = useState<"high" | "medium" | "low">("medium");
+  const [isClientSide, setIsClientSide] = useState(false);
   const {
+    tasks,
     isLoading,
     error,
     filter,
@@ -37,24 +38,19 @@ const TaskManager: React.FC = () => {
     fetchTasks,
   } = useTasks();
 
-  const tasks = useTasksStore((state) => state.tasks);
-
   useEffect(() => {
+    setIsClientSide(true);
     fetchTasks();
-  }, []);
+  }, [fetchTasks]);
 
-  const handleAddTask = async () => {
+  const handleAddTask = () => {
     if (!newTask.trim()) return;
-    await addNewTask(newTask, newPriority);
+    addNewTask(newTask, newPriority);
     setNewTask("");
     setNewPriority("medium");
   };
 
-  useEffect(() => {
-    console.log("tasks", tasks);
-  }, [tasks]);
-
-  if (isLoading) return <div>Loading...</div>;
+  if (!isClientSide || isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
   return (
@@ -111,7 +107,7 @@ const TaskManager: React.FC = () => {
                 key={task.id}
                 id={task.id}
                 task={task.task}
-                priority={task.priority!}
+                priority={task.priority || 'medium'}
                 onUpdate={updateTask}
                 onDelete={removeTask}
               />
