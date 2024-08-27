@@ -3,7 +3,7 @@ import OpenAI from 'openai';
 import fs from 'fs/promises';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const tasksFilePath = `${process.env.DATA_DIR}/tasks.json`;
+const tasksFilePath = 'app/api/tasks/data/tasks.json';
 
 async function readTasks() {
   const data = await fs.readFile(tasksFilePath, 'utf8');
