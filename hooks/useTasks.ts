@@ -38,9 +38,17 @@ export const useTasks = () => {
       priority,
       due_date: null,
       created_at: new Date().toISOString(),
+      completed: false,
     };
     addTask(task);
     return task;
+  };
+
+  const toggleTaskCompletion = (id: number) => {
+    const task = tasks.find(t => t.id === id);
+    if (task) {
+      updateTask(id, { ...task, completed: !task.completed });
+    }
   };
 
   return {
@@ -53,5 +61,6 @@ export const useTasks = () => {
     updateTask,
     removeTask,
     fetchTasks,
+    toggleTaskCompletion,
   };
 };

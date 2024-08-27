@@ -1,11 +1,4 @@
-interface Task {
-  id: number;
-  task: string;
-  priority: 'high' | 'medium' | 'low';
-  due_date: string | null;
-  created_at: string;
-  updated_at?: string;
-}
+import { Task } from '../types'
 
 const isClient = typeof window !== 'undefined';
 
@@ -17,21 +10,24 @@ function createDefaultTasks(): Task[] {
       task: 'Complete project proposal',
       priority: 'high',
       due_date: '2023-06-30',
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      completed: false
     },
     {
       id: 2,
       task: 'Schedule team meeting',
       priority: 'medium',
       due_date: '2023-06-15',
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      completed: false
     },
     {
       id: 3,
       task: 'Review quarterly report',
       priority: 'low',
       due_date: '2023-06-30',
-      created_at: new Date().toISOString()
+      created_at: new Date().toISOString(),
+      completed: false
     }
   ];
 }
@@ -75,7 +71,8 @@ export function addTask(task: string, priority: 'high' | 'medium' | 'low' = 'med
     task,
     priority,
     due_date,
-    created_at: new Date().toISOString()
+    created_at: new Date().toISOString(),
+    completed: false
   };
   
   tasks.push(newTask);
@@ -83,7 +80,7 @@ export function addTask(task: string, priority: 'high' | 'medium' | 'low' = 'med
   return newTask;
 }
 
-export function updateTask(task_id: number, new_task?: string, new_priority?: 'high' | 'medium' | 'low', new_due_date?: string | null): Task {
+export function updateTask(task_id: number, new_task?: string, new_priority?: 'high' | 'medium' | 'low', new_due_date?: string | null, completed?: boolean): Task {
   const tasks = getTasks();
   const taskIndex = tasks.findIndex(t => t.id === task_id);
   

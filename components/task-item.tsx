@@ -3,16 +3,18 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Delete, Edit } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface TaskListItemProps {
   id: number;
   task: string;
   priority: 'high' | 'medium' | 'low';
-  onUpdate: (id: number, updatedTask: { task?: string; priority?: 'high' | 'medium' | 'low' }) => void;
+  completed: boolean;
+  onUpdate: (id: number, updatedTask: { task?: string; priority?: 'high' | 'medium' | 'low'; completed?: boolean }) => void;
   onDelete: (id: number) => void;
 }
 
-const TaskListItem: React.FC<TaskListItemProps> = ({ id, task, priority, onUpdate, onDelete }) => {
+const TaskListItem: React.FC<TaskListItemProps> = ({ id, task, priority, completed, onUpdate, onDelete }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editedTask, setEditedTask] = useState(task);
   const [editedPriority, setEditedPriority] = useState(priority);
@@ -32,6 +34,10 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ id, task, priority, onUpdat
     setIsEditing(false);
   };
 
+  const handleCheckboxChange = (checked: boolean) => {
+    onUpdate(id, { completed: checked });
+  };
+
   const priorityColors = {
     high: 'bg-red-100 text-red-800',
     medium: 'bg-yellow-100 text-yellow-800',
@@ -40,6 +46,11 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ id, task, priority, onUpdat
 
   return (
     <li className="flex items-center justify-between p-2 bg-white rounded shadow">
+      <Checkbox
+        checked={completed}
+        onCheckedChange={handleCheckboxChange}
+        className="mr-2"
+      />
       {isEditing ? (
         <>
           <Input
@@ -62,10 +73,16 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ id, task, priority, onUpdat
         </>
       ) : (
         <>
-          <span className="flex-grow text-sm">{task}</span>
+          <span className={`flex-grow text-sm ${completed ? 'line-through text-gray-500' : ''}`}>{task}</span>
           <span className={`px-2 py-1 rounded-full text-xs font-semibold mr-2 ${priorityColors[priority]}`}>
             {priority}
           </span>
+          <Button onClick={handleEdit} size="sm" variant="ghost" className="mr-2">
+            <Edit size={16} />
+          </Button>
+          <Button onClick={() => onDelete(id)} size="sm" variant="ghost" className="text-red-500">
+            <Delete size={16} />
+          </Button>
         </>
       )}
     </li>

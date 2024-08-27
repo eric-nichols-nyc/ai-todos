@@ -80,10 +80,10 @@ export async function POST(req: Request) {
 }
 
 export async function PUT(req: Request) {
-  const { task_id, new_task, new_priority, new_due_date } = await req.json();
+  const { task_id, new_task, new_priority, new_due_date, completed } = await req.json();
 
   try {
-    const updatedTask = updateTask(task_id, new_task, new_priority, new_due_date);
+    const updatedTask = updateTask(task_id, new_task, new_priority, new_due_date, completed);
     return NextResponse.json({ updatedTask });
   } catch (error) {
     console.error('Error updating task:', error);

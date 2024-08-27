@@ -50,6 +50,10 @@ const TaskManager: React.FC = () => {
     setNewPriority("medium");
   };
 
+  const handleUpdateTask = (id: number, updatedTask: Partial<Task>) => {
+    updateTask(id, updatedTask);
+  };
+
   if (!isClientSide || isLoading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -85,7 +89,7 @@ const TaskManager: React.FC = () => {
             </Select>
             <Button onClick={handleAddTask}>Add</Button>
           </div>
-          <Select
+          {/* <Select
             value={filter}
             onValueChange={(value: "all" | "high" | "medium" | "low") =>
               setFilter(value)
@@ -100,7 +104,7 @@ const TaskManager: React.FC = () => {
               <SelectItem value="medium">Medium Priority</SelectItem>
               <SelectItem value="high">High Priority</SelectItem>
             </SelectContent>
-          </Select>
+          </Select> */}
           <ul className="space-y-2">
             {tasks.map((task: Task) => (
               <TaskListItem
@@ -108,7 +112,8 @@ const TaskManager: React.FC = () => {
                 id={task.id}
                 task={task.task}
                 priority={task.priority || 'medium'}
-                onUpdate={updateTask}
+                completed={task.completed || false}
+                onUpdate={handleUpdateTask}
                 onDelete={removeTask}
               />
             ))}

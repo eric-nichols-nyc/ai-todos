@@ -5,4 +5,5 @@ export type Task = {
     due_date: string | null;
     created_at: string;
     updated_at?: string;
+    completed: boolean;
 };
