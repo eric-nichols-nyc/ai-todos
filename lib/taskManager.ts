@@ -1,9 +1,3 @@
-import fs from 'fs';
-import path from 'path';
-
-const dataFile = 'tasks.json';
-console.log(dataFile);
-
 interface Task {
   id: number;
   task: string;
@@ -13,19 +7,53 @@ interface Task {
   updated_at?: string;
 }
 
-// Helper function to read tasks from the JSON file
-export function getTasks(): Task[] {
-  if (!fs.existsSync(dataFile)) {
-    return [];
-  }
-  const jsonData = fs.readFileSync(dataFile, 'utf8');
-  return JSON.parse(jsonData);
+const isClient = typeof window !== 'undefined';
+
+// Function to create default tasks
+function createDefaultTasks(): Task[] {
+  return [
+    {
+      id: 1,
+      task: 'Complete project proposal',
+      priority: 'high',
+      due_date: '2023-06-30',
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 2,
+      task: 'Schedule team meeting',
+      priority: 'medium',
+      due_date: '2023-06-15',
+      created_at: new Date().toISOString()
+    },
+    {
+      id: 3,
+      task: 'Review quarterly report',
+      priority: 'low',
+      due_date: '2023-06-30',
+      created_at: new Date().toISOString()
+    }
+  ];
 }
 
-// Helper function to write tasks to the JSON file
+// Helper function to read tasks from localStorage
+export function getTasks(): Task[] {
+  if (!isClient) return [];
+  const jsonData = localStorage.getItem('tasks');
+  if (jsonData) {
+    return JSON.parse(jsonData);
+  } else {
+    const defaultTasks = createDefaultTasks();
+    saveTasks(defaultTasks);
+    return defaultTasks;
+  }
+}
+
+// Helper function to write tasks to localStorage
 function saveTasks(tasks: Task[]): void {
-  const jsonData = JSON.stringify(tasks, null, 2);
-  fs.writeFileSync(dataFile, jsonData);
+  if (!isClient) return;
+  const jsonData = JSON.stringify(tasks);
+  localStorage.setItem('tasks', jsonData);
 }
 
 export function listTasks(filter: string | null = null): Task[] {
@@ -49,7 +77,6 @@ export function addTask(task: string, priority: 'high' | 'medium' | 'low' = 'med
     due_date,
     created_at: new Date().toISOString()
   };
-  console.log('new task, ', newTask)
   
   tasks.push(newTask);
   saveTasks(tasks);
