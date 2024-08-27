@@ -54,11 +54,11 @@ const TaskManager: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <Card className="w-full max-w-md mx-auto">
+    <Card className="w-full h-[calc(100vh-2rem)] flex flex-col">
       <CardHeader>
         <h2 className="text-2xl font-bold">Task Manager</h2>
       </CardHeader>
-      <CardContent>
+      <CardContent className="flex-grow overflow-auto">
         <div className="space-y-4">
           <div className="flex space-x-2">
             <Input

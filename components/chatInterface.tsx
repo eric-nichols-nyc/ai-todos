@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useTasks } from "@/hooks/useTasks";
+import QuickOptions from "./QuickOptions";
 
 interface ChatMessage {
   id: number;
@@ -26,6 +27,12 @@ const ChatInterface: React.FC = () => {
 
   const { tasks, addNewTask, updateTask, removeTask } = useTasks();
 
+  const quickOptions = [
+    "Get a haircut",
+    "Buy groceries",
+    "Schedule dentist appointment",
+  ];
+
   useEffect(() => {
     if (scrollAreaRef.current) {
       scrollAreaRef.current.scrollTop = scrollAreaRef.current.scrollHeight;
@@ -35,7 +42,6 @@ const ChatInterface: React.FC = () => {
   useEffect(() => {
     addWelcomeMessage();
   }, []);
-
 
   const addWelcomeMessage = () => {
     const welcomeMessage: ChatMessage = {
@@ -111,7 +117,6 @@ const ChatInterface: React.FC = () => {
   };
 
   const handleUpdate = async (message: string) => {
-    //     console.log('message:', message);
     const match = message.match(/(update|change) task (.*) to (.*)/i);
     console.log(match);
     if (!match) {
@@ -157,8 +162,12 @@ const ChatInterface: React.FC = () => {
     }
   };
 
+  const handleOptionClick = (option: string) => {
+    setInputMessage(option);
+  };
+
   return (
-    <Card className="w-full max-w-md mx-auto h-[600px] flex flex-col">
+    <Card className="w-full h-[calc(100vh-2rem)] flex flex-col">
       <CardHeader>
         <h2 className="text-2xl font-bold">Chat with AI Assistant</h2>
       </CardHeader>
@@ -183,7 +192,8 @@ const ChatInterface: React.FC = () => {
           )}
         </ScrollArea>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex-col items-stretch space-y-4">
+        <QuickOptions options={quickOptions} onOptionClick={handleOptionClick} />
         <form
           onSubmit={(e) => {
             e.preventDefault();

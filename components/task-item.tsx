@@ -66,12 +66,6 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ id, task, priority, onUpdat
           <span className={`px-2 py-1 rounded-full text-xs font-semibold mr-2 ${priorityColors[priority]}`}>
             {priority}
           </span>
-          <Button onClick={handleEdit} size="sm" variant="outline" className="mr-2">
-            <Edit size={16} />
-          </Button>
-          <Button onClick={() => onDelete(id)} size="sm" variant="destructive">
-            <Delete size={16} />
-          </Button>
         </>
       )}
     </li>

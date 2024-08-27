@@ -1,12 +1,17 @@
-import Chat from "@/components/chatInterface";
+import ChatInterface from "@/components/chatInterface";
 import TaskManager from "@/components/taskManager";
 
 export default function Home() {
   return (
-    <div className="flex w-full">
-    <TaskManager />
-    <Chat />
+    <div className="flex justify-center items-start min-h-screen bg-gray-100 p-4">
+      <div className="flex w-full max-w-6xl space-x-4">
+        <div className="w-1/2">
+          <TaskManager />
+        </div>
+        <div className="w-1/2">
+          <ChatInterface />
+        </div>
+      </div>
     </div>
- 
   );
 }

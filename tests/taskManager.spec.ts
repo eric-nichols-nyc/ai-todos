@@ -15,6 +15,9 @@ test.describe('TaskManager', () => {
   test('should add a new task', async ({ page }) => {
     await page.goto('/');
     
+    // Wait for the task list items to be rendered
+    await page.waitForSelector('li');
+    
     // Get the initial number of tasks
     const initialTaskCount = await page.$$eval('li', (tasks) => tasks.length);
     
@@ -31,18 +34,26 @@ test.describe('TaskManager', () => {
     expect(newTaskCount).toBe(initialTaskCount + 1);
   });
 
-  test('should filter tasks by priority', async ({ page }) => {
+  test('should load the three default tasks', async ({ page }) => {
     await page.goto('/');
-    
-    // Wait for tasks to load
+
+    // Wait for the task list to be visible
     await page.waitForSelector('ul');
-    
-    // Select high priority filter
-    await page.selectOption('select', 'high');
-    
-    // Check if only high priority tasks are displayed
-    const highPriorityTasks = await page.$$('li:has-text("High")');
-    const allVisibleTasks = await page.$$('li');
-    expect(highPriorityTasks.length).toBe(allVisibleTasks.length);
+
+    // Check if exactly three tasks are loaded
+    const tasks = await page.$$('li');
+    expect(tasks.length).toBe(3);
+
+    // Check the content of each default task
+    const defaultTasks = [
+      'Complete project proposal',
+      'Schedule team meeting',
+      'Review quarterly report'
+    ];
+
+    for (let i = 0; i < defaultTasks.length; i++) {
+      const taskText = await tasks[i].textContent();
+      expect(taskText).toContain(defaultTasks[i]);
+    }
   });
 });
