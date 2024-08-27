@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import fs from 'fs/promises';
-import path from 'path';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
-const tasksFilePath = path.join(process.env.DATA_DIR!, 'tasks.json');
+const tasksFilePath = `${process.env.DATA_DIR}/tasks.json`;
 
 async function readTasks() {
   const data = await fs.readFile(tasksFilePath, 'utf8');
