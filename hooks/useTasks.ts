@@ -1,9 +1,10 @@
-import { useEffect, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useTasksStore } from '@/store/task-store';
 import { Task } from '@/types';
 import { getTasks as getDefaultTasks } from '@/lib/taskManager';
 
 export const useTasks = () => {
+  // Function to post a new task to the API
   const postTask = async (task: Task) => {
     try {
       const response = await fetch('/api/tasks', {
@@ -24,6 +25,8 @@ export const useTasks = () => {
       throw error;
     }
   };
+
+  // Destructure values and functions from the task store
   const {
     tasks,
     filter,
@@ -38,6 +41,7 @@ export const useTasks = () => {
     removeTask,
   } = useTasksStore();
 
+  // Function to fetch tasks (currently using default tasks)
   const fetchTasks = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -51,10 +55,12 @@ export const useTasks = () => {
     }
   }, [setTasks, setError, setIsLoading]);
 
+  // Function to add a new task
   const addNewTask = (t: Task, priority: 'high' | 'medium' | 'low' = 'medium') => {
     addTask(t);
   };
 
+  // Function to toggle task completion status
   const toggleTaskCompletion = (id: string) => {
     const task = tasks.find(t => t.id === id);
     if (task) {
@@ -62,6 +68,7 @@ export const useTasks = () => {
     }
   };
 
+  // Return all necessary values and functions
   return {
     tasks,
     isLoading,
