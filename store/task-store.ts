@@ -13,8 +13,8 @@ interface TasksState {
   setIsLoading: (isLoading: boolean) => void;
   setError: (error: string | null) => void;
   addTask: (task: Task) => void;
-  updateTask: (id: number, updatedTask: Partial<Task>) => void;
-  removeTask: (id: number) => void;
+  updateTask: (id: string, updatedTask: Partial<Task>) => void;
+  removeTask: (id: string) => void;
 }
 
 export const useTasksStore = create<TasksState>()(

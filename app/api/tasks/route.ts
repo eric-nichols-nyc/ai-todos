@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
 import { listTasks, addTask, updateTask, removeTask, getTasks } from '@/lib/taskManager';
+import { Task } from '@/types';
+import { v4 as uuidv4 } from 'uuid';
 
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
@@ -25,21 +27,31 @@ export async function POST(req: Request) {
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
-        { role: "system", content: "You are a helpful assistant that manages a task list. If the user asks to add a task, suggest it in your response and include it in the suggestedTask field of your JSON response." },
+        { role: "system", content: "You are a helpful assistant that manages a task list. If the user provides a high level task, suggest a list of more specific tasks related to it. If the user asks to add a specific task, suggest it in your response." },
         { role: "user", content: `Current tasks: ${JSON.stringify(tasks)}. User message: ${message}` }
       ],
       functions: [
         {
-          name: "suggest_task",
-          description: "Suggest a new task to be added to the list",
+          name: "suggest_tasks",
+          description: "Suggest a list of tasks related to a general task or a single specific task",
           parameters: {
             type: "object",
             properties: {
-              suggestedTask: { type: "string", description: "The suggested task" },
-              priority: { type: "string", enum: ["high", "medium", "low"], description: "The priority level of the task" },
-              due_date: { type: "string", format: "date", description: "The due date for the task (YYYY-MM-DD)" }
+              suggestedTasks: { 
+                type: "array", 
+                items: {
+                  type: "object",
+                  properties: {
+                    task: { type: "string", description: "The suggested task" },
+                    priority: { type: "string", enum: ["high", "medium", "low"], description: "The priority level of the task" },
+                    due_date: { type: "string", format: "date", description: "The due date for the task (YYYY-MM-DD)" }
+                  },
+                  required: ["task"]
+                },
+                description: "An array of suggested tasks"
+              }
             },
-            required: ["suggestedTask"]
+            required: ["suggestedTasks"]
           }
         }
       ],
@@ -47,31 +59,50 @@ export async function POST(req: Request) {
     });
 
     const aiMessage = completion.choices[0].message;
-    let suggestedTask = null;
-    let priority = null;
-    let dueDate = null;
+    let suggestedTasks = null;
+    let newTasks = null;
 
-    if (aiMessage.function_call && aiMessage.function_call.name === "suggest_task") {
+    if (aiMessage.function_call && aiMessage.function_call.name === "suggest_tasks") {
       const functionArgs = JSON.parse(aiMessage.function_call.arguments);
-      suggestedTask = functionArgs.suggestedTask;
-      priority = functionArgs.priority || 'medium';
-      dueDate = functionArgs.due_date || null;
+      suggestedTasks = functionArgs.suggestedTasks;
       
-      const newTask = addTask(suggestedTask, priority, dueDate);
+      newTasks = [];
+      for (const task of suggestedTasks) {       
+        const newTask: Task = {
+          id: uuidv4(),
+          task,
+          priority:task.priority,
+          due_date:task.due_date,
+          created_at: task.created_at,
+          completed: false
+        };
+
+        newTasks.push(newTask);
+      }
       
-      const responseMessage = `Certainly! I added the following task to your list: "${suggestedTask}" ${dueDate ? ` and due date ${dueDate}` : ''}. Is there anything else you'd like me to do?`;
+      const taskList = suggestedTasks.map((task:Task) => `"${task.task}"`).join(", ");
+      const responseMessage = `Certainly! I've added the following tasks to your list: ${taskList}. Is there anything else you'd like me to do?`;
       
       return NextResponse.json({
         message: responseMessage,
-        suggestedTask: suggestedTask,
-        newTask: newTask
+        suggestedTasks: suggestedTasks,
+        newTasks: newTasks
       });
     }
 
+    // Check if there are any tasks in the data
+    // if (data.tasks && data.tasks.length > 0) {
+    //   newTasks = [];
+    //   for (const task of data.tasks) {
+    //     const newTask = addTask(task.task, task.priority || 'medium', task.due_date || null);
+    //     newTasks.push(newTask);
+    //   }
+    // }
+
     return NextResponse.json({
       message: aiMessage.content,
-      suggestedTask: null,
-      newTask: null
+      suggestedTasks: suggestedTasks,
+      newTasks: newTasks
     });
   } catch (error) {
     console.error('OpenAI API error:', error);

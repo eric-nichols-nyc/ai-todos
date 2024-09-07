@@ -31,20 +31,11 @@ export const useTasks = () => {
     }
   }, [setTasks, setError, setIsLoading]);
 
-  const addNewTask = (newTask: string, priority: 'high' | 'medium' | 'low' = 'medium') => {
-    const task: Task = {
-      id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
-      task: newTask,
-      priority,
-      due_date: null,
-      created_at: new Date().toISOString(),
-      completed: false,
-    };
-    addTask(task);
-    return task;
+  const addNewTask = (t: Task, priority: 'high' | 'medium' | 'low' = 'medium') => {
+    addTask(t);
   };
 
-  const toggleTaskCompletion = (id: number) => {
+  const toggleTaskCompletion = (id: string) => {
     const task = tasks.find(t => t.id === id);
     if (task) {
       updateTask(id, { ...task, completed: !task.completed });

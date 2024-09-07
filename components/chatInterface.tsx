@@ -86,7 +86,6 @@ const ChatInterface: React.FC = () => {
 
       setMessages((prevMessages) => [...prevMessages, aiMessage]);
 
-      console.log("data:", data);
       if (
         inputMessage.toLowerCase().startsWith("update task") ||
         inputMessage.toLowerCase().startsWith("change task")
@@ -95,8 +94,14 @@ const ChatInterface: React.FC = () => {
         handleUpdate(inputMessage);
       }
 
-      if (data.newTask) {
-        await addNewTask(data.newTask.task, data.newTask.priority);
+      if (data.newTasks && data.newTasks.length > 0) {
+        console.log("data:", data.newTasks);
+        const newTasks = [];
+        for (const task of data.newTasks) {
+          console.log(task);
+          const newTask = addNewTask(task.task, task.priority || "medium");
+          newTasks.push(newTask);
+        }
       } else if (
         inputMessage.toLowerCase().includes("delete task") ||
         inputMessage.toLowerCase().includes("remove task")
@@ -149,9 +154,7 @@ const ChatInterface: React.FC = () => {
     const taskIndex = words.indexOf("task");
     if (taskIndex === -1) return;
 
-    const taskId = parseInt(words[taskIndex + 1]);
-    if (isNaN(taskId)) return;
-
+    const taskId = words[taskIndex + 1];
     if (message.toLowerCase().includes("update task")) {
       const newTaskDetails = message.slice(
         message.toLowerCase().indexOf("to") + 3
@@ -193,7 +196,10 @@ const ChatInterface: React.FC = () => {
         </ScrollArea>
       </CardContent>
       <CardFooter className="flex-col items-stretch space-y-4">
-        <QuickOptions options={quickOptions} onOptionClick={handleOptionClick} />
+        <QuickOptions
+          options={quickOptions}
+          onOptionClick={handleOptionClick}
+        />
         <form
           onSubmit={(e) => {
             e.preventDefault();
