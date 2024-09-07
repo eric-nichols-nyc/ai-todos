@@ -63,7 +63,7 @@ const TaskManager: React.FC = () => {
     }
   };
 
-  const handleUpdateTask = (id: number, updatedTask: Partial<Task>) => {
+  const handleUpdateTask = (id: string, updatedTask: Partial<Task>) => {
     updateTask(id, updatedTask);
   };
 
@@ -126,7 +126,7 @@ const TaskManager: React.FC = () => {
                 task={task.task}
                 priority={task.priority || 'medium'}
                 completed={task.completed || false}
-                onUpdate={handleUpdateTask}
+                onUpdate={(id, updatedTask) => handleUpdateTask(id, updatedTask as Partial<Task>)}
                 onDelete={removeTask}
               />
             ))}
