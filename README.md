@@ -1,39 +1,88 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI-Todos: Task Management Application
 
-## Getting Started
+AI-Todos is a modern, responsive task management application built with Next.js and React. It allows users to create, update, and delete tasks, as well as set priorities and mark tasks as completed.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Create, read, update, and delete tasks
+- Set task priorities (high, medium, low)
+- Mark tasks as completed
+- Filter tasks by priority
+- Responsive design for various screen sizes
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Technologies Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Next.js](https://nextjs.org/): React framework for server-side rendering and static site generation
+- [React](https://reactjs.org/): JavaScript library for building user interfaces
+- [TypeScript](https://www.typescriptlang.org/): Typed superset of JavaScript
+- [Tailwind CSS](https://tailwindcss.com/): Utility-first CSS framework
+- [Zustand](https://github.com/pmndrs/zustand): State management library
+- [Lucide React](https://lucide.dev/): Icon library
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Project Structure
+
+- `app/`: Next.js app directory containing pages and layouts
+- `components/`: React components used throughout the application
+  - `ui/`: Reusable UI components (buttons, inputs, etc.)
+  - `taskManager.tsx`: Main component for managing tasks
+  - `task-item.tsx`: Component for rendering individual task items
+- `hooks/`: Custom React hooks
+  - `useTasks.ts`: Hook for managing task-related operations
+- `lib/`: Utility functions and helpers
+- `store/`: Zustand store for global state management
+- `types/`: TypeScript type definitions
+- `public/`: Static assets and API routes
+
+## Main Components and Their Relationships
+
+1. `TaskManager` (components/taskManager.tsx):
+   - Main component that renders the task list and handles task operations
+   - Uses the `useTasks` hook for task management
+   - Renders `TaskListItem` components for each task
+
+2. `TaskListItem` (components/task-item.tsx):
+   - Renders individual task items
+   - Handles task editing, completion toggling, and deletion
+
+3. `useTasks` (hooks/useTasks.ts):
+   - Custom hook that provides task-related operations and state
+   - Interfaces with the Zustand store for global state management
+
+4. `task-store.ts` (store/task-store.ts):
+   - Zustand store for managing the global task state
+
+## Building and Running the Application
+
+1. Clone the repository:
+   ```
+   git clone https://github.com/your-username/ai-todos.git
+   cd ai-todos
+   ```
+
+2. Install dependencies:
+   ```
+   npm install
+   ```
+
+3. Run the development server:
+   ```
+   npm run dev
+   ```
+
+4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
 
 ## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+To learn more about the technologies used in this project, check out the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- [Next.js Documentation](https://nextjs.org/docs)
+- [React Documentation](https://reactjs.org/docs/getting-started.html)
+- [TypeScript Documentation](https://www.typescriptlang.org/docs/)
+- [Tailwind CSS Documentation](https://tailwindcss.com/docs)
+- [Zustand Documentation](https://github.com/pmndrs/zustand)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
+## Deployment
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
-# ai-todos
-# ai-todos
-# ai-todos
+Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
