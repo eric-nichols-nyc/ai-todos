@@ -1,12 +1,13 @@
 import { Task } from '../types'
 
 const isClient = typeof window !== 'undefined';
+import { v4 as uuidv4 } from 'uuid';
 
 // Function to create default tasks
 function createDefaultTasks(): Task[] {
   return [
     {
-      id: 1,
+      id: '1',
       task: 'Complete project proposal',
       priority: 'high',
       due_date: '2023-06-30',
@@ -14,7 +15,7 @@ function createDefaultTasks(): Task[] {
       completed: false
     },
     {
-      id: 2,
+      id: '2',
       task: 'Schedule team meeting',
       priority: 'medium',
       due_date: '2023-06-15',
@@ -22,7 +23,7 @@ function createDefaultTasks(): Task[] {
       completed: false
     },
     {
-      id: 3,
+      id: '3',
       task: 'Review quarterly report',
       priority: 'low',
       due_date: '2023-06-30',
@@ -67,7 +68,7 @@ export function addTask(task: string, priority: 'high' | 'medium' | 'low' = 'med
   
   const tasks = getTasks();
   const newTask: Task = {
-    id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+    id: uuidv4(),
     task,
     priority,
     due_date,
@@ -80,7 +81,7 @@ export function addTask(task: string, priority: 'high' | 'medium' | 'low' = 'med
   return newTask;
 }
 
-export function updateTask(task_id: number, new_task?: string, new_priority?: 'high' | 'medium' | 'low', new_due_date?: string | null, completed?: boolean): Task {
+export function updateTask(task_id: string, new_task?: string, new_priority?: 'high' | 'medium' | 'low', new_due_date?: string | null, completed?: boolean): Task {
   const tasks = getTasks();
   const taskIndex = tasks.findIndex(t => t.id === task_id);
   
@@ -100,7 +101,7 @@ export function updateTask(task_id: number, new_task?: string, new_priority?: 'h
   return tasks[taskIndex];
 }
 
-export function removeTask(task_id: number): { message: string } {
+export function removeTask(task_id: string): { message: string } {
   let tasks = getTasks();
   const initialLength = tasks.length;
   tasks = tasks.filter(t => t.id !== task_id);

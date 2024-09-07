@@ -52,6 +52,7 @@ const TaskManager: React.FC = () => {
         task: newTask,
         priority: newPriority,
         completed: false,
+        created_at: new Date().toISOString(),
       };
       await postTask(newTaskObject);
       addNewTask(newTaskObject);

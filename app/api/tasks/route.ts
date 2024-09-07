@@ -127,7 +127,7 @@ export async function DELETE(req: Request) {
   if(!searchParams.has('task_id')) {
     return NextResponse.json({ error: 'Task ID is required' }, { status: 400 });
   }
-  const task_id = parseInt(searchParams.get('task_id')!);
+  const task_id = searchParams.get('task_id')!;
 
   try {
     const result = removeTask(task_id);
