@@ -36,6 +36,7 @@ const TaskManager: React.FC = () => {
     updateTask,
     removeTask,
     fetchTasks,
+    postTask,
   } = useTasks();
 
   useEffect(() => {
@@ -43,11 +44,23 @@ const TaskManager: React.FC = () => {
     fetchTasks();
   }, [fetchTasks]);
 
-  const handleAddTask = () => {
+  const handleAddTask = async () => {
     if (!newTask.trim()) return;
-    addNewTask(newTask, newPriority);
-    setNewTask("");
-    setNewPriority("medium");
+    try {
+      const newTaskObject = {
+        id: Date.now().toString(), // Generate a temporary ID
+        task: newTask,
+        priority: newPriority,
+        completed: false,
+      };
+      await postTask(newTaskObject);
+      addNewTask(newTaskObject);
+      setNewTask("");
+      setNewPriority("medium");
+    } catch (error) {
+      console.error("Failed to add task:", error);
+      // Optionally, you can show an error message to the user here
+    }
   };
 
   const handleUpdateTask = (id: number, updatedTask: Partial<Task>) => {
