@@ -6,12 +6,12 @@ import { Delete, Edit } from 'lucide-react';
 import { Checkbox } from '@/components/ui/checkbox';
 
 interface TaskListItemProps {
-  id: number;
+  id: string;
   task: string;
   priority: 'high' | 'medium' | 'low';
   completed: boolean;
-  onUpdate: (id: number, updatedTask: { task?: string; priority?: 'high' | 'medium' | 'low'; completed?: boolean }) => void;
-  onDelete: (id: number) => void;
+  onUpdate: (id: string, updatedTask: { task?: string; priority?: 'high' | 'medium' | 'low'; completed?: boolean }) => void;
+  onDelete: (id: string) => void;
 }
 
 const TaskListItem: React.FC<TaskListItemProps> = ({ id, task, priority, completed, onUpdate, onDelete }) => {
@@ -38,7 +38,7 @@ const TaskListItem: React.FC<TaskListItemProps> = ({ id, task, priority, complet
     onUpdate(id, { completed: checked });
   };
 
-  const priorityColors = {
+  const priorityColors: Record<'high' | 'medium' | 'low', string> = {
     high: 'bg-red-100 text-red-800',
     medium: 'bg-yellow-100 text-yellow-800',
     low: 'bg-green-100 text-green-800',
