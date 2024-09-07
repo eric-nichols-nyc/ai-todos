@@ -4,6 +4,26 @@ import { Task } from '@/types';
 import { getTasks as getDefaultTasks } from '@/lib/taskManager';
 
 export const useTasks = () => {
+  const postTask = async (task: Task) => {
+    try {
+      const response = await fetch('/api/tasks', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(task),
+      });
+      
+      if (!response.ok) {
+        throw new Error('Failed to post task');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error posting task:', error);
+      throw error;
+    }
+  };
   const {
     tasks,
     filter,
@@ -53,5 +73,6 @@ export const useTasks = () => {
     removeTask,
     fetchTasks,
     toggleTaskCompletion,
+    postTask,
   };
 };
