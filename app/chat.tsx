@@ -284,23 +284,25 @@ export const Chat = () => {
         onSubmit={onSubmit}
         className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring flex-shrink-0"
       >
-        <ChatInput
-          ref={inputRef}
-          onKeyDown={onKeyDown}
-          value={inputMessage}
-          onChange={(e) => setInputMessage(e.target.value)}
-          placeholder="Type your message here..."
-          className="min-h-12 resize-none rounded-lg bg-background border-0 p-3 shadow-none focus-visible:ring-0"
-        />
-        <Button
-          disabled={!inputMessage || isLoading}
-          type="submit"
-          size="sm"
-          className="ml-auto gap-1.5"
-        >
-          Send Message
-          <CornerDownLeft className="size-3.5" />
-        </Button>
+        <div className="flex items-center p-2">
+          <ChatInput
+            ref={inputRef}
+            onKeyDown={onKeyDown}
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            placeholder="Type your message here..."
+            className="flex-grow min-h-12 resize-none rounded-lg bg-background border-0 p-3 shadow-none focus-visible:ring-0 pr-20"
+          />
+          <Button
+            disabled={!inputMessage || isLoading}
+            type="submit"
+            size="sm"
+            className="absolute right-4 bottom-4 gap-1.5"
+          >
+            Send
+            <CornerDownLeft className="size-3.5" />
+          </Button>
+        </div>
       </form>
     </div>
   );
