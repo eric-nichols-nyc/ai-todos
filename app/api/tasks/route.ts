@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import OpenAI from 'openai';
-import { listTasks, addTask, updateTask, removeTask, getTasks } from '@/lib/taskManager';
+import { listTasks, updateTask, removeTask, getTasks } from '@/lib/taskManager';
 import { Task } from '@/types';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -89,15 +89,6 @@ export async function POST(req: Request) {
         newTasks: newTasks
       });
     }
-
-    // Check if there are any tasks in the data
-    // if (data.tasks && data.tasks.length > 0) {
-    //   newTasks = [];
-    //   for (const task of data.tasks) {
-    //     const newTask = addTask(task.task, task.priority || 'medium', task.due_date || null);
-    //     newTasks.push(newTask);
-    //   }
-    // }
 
     return NextResponse.json({
       message: aiMessage.content,
