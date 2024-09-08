@@ -61,14 +61,6 @@ export const Chat = () => {
 
   // Scroll to bottom of messages when new messages are added
   useEffect(() => {
-    if (messagesContainerRef.current) {
-      const scrollContainer = messagesContainerRef.current;
-      scrollContainer.scrollTop = scrollContainer.scrollHeight;
-    }
-  }, [messages]);
-
-  // Ensure scroll to bottom after DOM update
-  useEffect(() => {
     const scrollToBottom = () => {
       if (messagesContainerRef.current) {
         const scrollContainer = messagesContainerRef.current;
@@ -76,8 +68,12 @@ export const Chat = () => {
       }
     };
 
-    // Use requestAnimationFrame to ensure the scroll happens after the DOM update
-    requestAnimationFrame(scrollToBottom);
+    scrollToBottom();
+
+    // Use a timeout to ensure the scroll happens after the DOM update
+    const timeoutId = setTimeout(scrollToBottom, 100);
+
+    return () => clearTimeout(timeoutId);
   }, [messages]);
 
   // Handle form submission
@@ -247,7 +243,7 @@ export const Chat = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-grow overflow-y-auto bg-slate-200">
+      <div className="flex-1 overflow-hidden bg-slate-200">
             {/* Initial Message */}
             {messages.length === 0 && (
           <div className='w-full bg-background shadow-sm border rounded-lg p-8 flex flex-col gap-2'>
@@ -262,7 +258,7 @@ export const Chat = () => {
         )}
 
         {/* Chat Message List */}
-        <ChatMessageList ref={messagesContainerRef} className="h-[calc(100vh-200px)] overflow-y-auto">
+        <ChatMessageList ref={messagesContainerRef} className="flex-1 overflow-y-auto">
           <AnimatePresence>
             {messages.map((message, index) => {
               const variant = getMessageVariant(message.role!);
