@@ -198,7 +198,7 @@ export const Chat = () => {
 
   return (
     <div className="h-full flex flex-col">
-      <div className="flex-grow overflow-y-auto bg-red-300">
+      <div className="flex-grow overflow-y-auto bg-slate-200">
             {/* Initial Message */}
             {messages.length === 0 && (
           <div className='w-full bg-background shadow-sm border rounded-lg p-8 flex flex-col gap-2'>
