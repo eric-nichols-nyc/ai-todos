@@ -194,7 +194,7 @@ export const Chat = () => {
 
   return (
     <div className="h-[calc(100dvh)] flex flex-col">
-      <div className="flex-grow overflow-y-auto bg-red-300">
+      <div className="flex-grow overflow-y-auto bg-red-300 pb-5">
         <ChatMessageList ref={messagesContainerRef}>
           <AnimatePresence>
             {messages.map((message, index) => {
