@@ -9,7 +9,6 @@ export default function Home() {
           <TaskManager />
         </div>
         <div className="w-1/2">
-          {/* <ChatInterface /> */}
           <Chat />
         </div>
       </div>
