@@ -232,12 +232,14 @@ export const Chat = () => {
                 >
                   <ChatBubble key={index} variant={variant}>
                     <Avatar>
-                      <AvatarImage
-                        src='/avatar.jpeg'
-                        alt="Avatar"
-                        className={message.role === "ai" ? "dark:invert" : ""}
-                      />
-                      <AvatarFallback>🤖</AvatarFallback>
+                      {message.role === "user" ? (
+                        <AvatarImage
+                          src='/avatar.jpeg'
+                          alt="User Avatar"
+                        />
+                      ) : (
+                        <AvatarFallback>🤖</AvatarFallback>
+                      )}
                     </Avatar>
                     <ChatBubbleMessage
                       isLoading={isLoading}
