@@ -63,9 +63,8 @@ export const Chat = () => {
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsGenerating(true);
-    // return is inputMessage is empty
+    // return if inputMessage is empty
     if (!inputMessage?.trim()) return;
-    //handleSubmit(e);
     const userMessage: ChatMessage = {
         id: Date.now(),
         message: inputMessage,
@@ -73,8 +72,13 @@ export const Chat = () => {
       };
 
       setMessages((prevMessages) => [...prevMessages, userMessage]);
-      setInputMessage(undefined);
+      setInputMessage("");
       setIsLoading(true);
+      
+      // Reset the form
+      if (formRef.current) {
+        formRef.current.reset();
+      }
       try {
         const response = await fetch("/api/tasks", {
           method: "POST",
