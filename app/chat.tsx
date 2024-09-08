@@ -19,6 +19,7 @@ import {
     RefreshCcw,
     Volume2,
   } from "lucide-react";
+import { Task } from "@/types";
 
 const ChatAiIcons = [
     {
@@ -43,7 +44,7 @@ interface ChatMessage {
   }
   
 export const Chat = () => {
-    const { tasks, addNewTask, updateTask, removeTask } = useTasks();
+  const { tasks, addNewTask, updateTask, removeTask, postTask } = useTasks();
 
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
@@ -80,16 +81,8 @@ export const Chat = () => {
         formRef.current.reset();
       }
       try {
-        const response = await fetch("/api/tasks", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: inputMessage }),
-        });
-  
-        if (!response.ok) throw new Error("Failed to get AI response");
-  
-        const data = await response.json();
-  
+        const data = await postTask({ message: inputMessage } as Task);
+
         const aiMessage: ChatMessage = {
           id: Date.now() + 1,
           message: data.message,
@@ -98,24 +91,22 @@ export const Chat = () => {
         };
 
         console.log('aiMessage:', aiMessage);
-  
+
         setMessages((prevMessages) => [...prevMessages, aiMessage]);
-  
+
         if (
           inputMessage.toLowerCase().startsWith("update task") ||
           inputMessage.toLowerCase().startsWith("change task")
         ) {
           console.log("update task");
-          handleUpdate(inputMessage);
+          await handleUpdate(inputMessage);
         }
-  
+
         if (data.newTasks && data.newTasks.length > 0) {
           console.log("data:", data.newTasks);
-          const newTasks = [];
           for (const task of data.newTasks) {
             console.log(task);
-            const newTask = addNewTask(task.task, task.priority || "medium");
-            newTasks.push(newTask);
+            await addNewTask(task);
           }
         } else if (
           inputMessage.toLowerCase().includes("delete task") ||
