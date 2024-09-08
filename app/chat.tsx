@@ -20,6 +20,7 @@ import {
     Volume2,
   } from "lucide-react";
 
+// Icons for AI message actions
 const ChatAiIcons = [
     {
       icon: CopyIcon,
@@ -35,6 +36,7 @@ const ChatAiIcons = [
     },
   ];
 
+// Interface for chat messages
 interface ChatMessage {
     id: number;
     message: string;
@@ -43,23 +45,28 @@ interface ChatMessage {
   }
   
 export const Chat = () => {
+    // Hook to manage tasks
     const { tasks, addNewTask, updateTask, removeTask } = useTasks();
 
+  // Refs for DOM elements
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
   const inputRef = useRef<HTMLTextAreaElement>(null);
 
+  // State management
   const [inputMessage, setInputMessage] = useState<string | undefined>(undefined);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
 
+  // Scroll to bottom of messages when new messages are added
   useEffect(() => {
     if (messagesContainerRef.current) {
         messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
     }
   }, [messages]);
 
+  // Handle form submission
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputMessage?.trim()) return;
@@ -85,12 +92,14 @@ export const Chat = () => {
     }
   };
 
+  // Create a user message object
   const createUserMessage = (message: string): ChatMessage => ({
     id: Date.now(),
     message,
     role: "user",
   });
 
+  // Create an AI message object
   const createAIMessage = (data: any): ChatMessage => ({
     id: Date.now() + 1,
     message: data.message,
@@ -98,10 +107,12 @@ export const Chat = () => {
     suggestedTask: data.suggestedTask,
   });
 
+  // Add a message to the chat
   const addMessageToChat = (message: ChatMessage) => {
     setMessages((prevMessages) => [...prevMessages, message]);
   };
 
+  // Reset input and form after submission
   const resetInputAndForm = () => {
     setInputMessage("");
     if (formRef.current) {
@@ -109,6 +120,7 @@ export const Chat = () => {
     }
   };
 
+  // Send message to API
   const sendMessageToAPI = async (message: string) => {
     const response = await fetch("/api/tasks", {
       method: "POST",
@@ -121,6 +133,7 @@ export const Chat = () => {
     return response.json();
   };
 
+  // Handle task operations based on user input and AI response
   const handleTaskOperations = async (inputMessage: string, data: any) => {
     if (inputMessage.toLowerCase().startsWith("update task") ||
         inputMessage.toLowerCase().startsWith("change task")) {
@@ -135,12 +148,14 @@ export const Chat = () => {
     }
   };
 
+  // Handle adding new tasks
   const handleNewTasks = async (newTasks: any[]) => {
     for (const task of newTasks) {
       await addNewTask(task.task, task.priority || "medium");
     }
   };
 
+  // Handle errors in message processing
   const handleError = (error: any) => {
     console.error("Error sending message:", error);
     const errorMessage: ChatMessage = {
@@ -151,6 +166,7 @@ export const Chat = () => {
     addMessageToChat(errorMessage);
   };
 
+  // Handle updating a task
   const handleUpdate = async (message: string) => {
     const match = message.match(/(update|change) task (.*) to (.*)/i);
     console.log(match);
@@ -178,6 +194,7 @@ export const Chat = () => {
     }
   };
 
+  // Handle task operations (update or remove)
   const handleTaskOperation = async (message: string) => {
     console.log("message:", message);
     const words = message.toLowerCase().split(" ");
@@ -195,10 +212,12 @@ export const Chat = () => {
     }
   };
 
+  // Handle clicking on a suggested option
   const handleOptionClick = (option: string) => {
     setInputMessage(option);
   };
 
+  // Handle keydown events in the input field
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
         console.log(isGenerating, isLoading, inputMessage);
@@ -209,6 +228,7 @@ export const Chat = () => {
     }
   };
 
+  // Determine the variant of the message bubble
   const getMessageVariant = (role: string) => role === "ai" ? "received" : "sent";
 
   return (
@@ -227,6 +247,7 @@ export const Chat = () => {
           </div>
         )}
 
+        {/* Chat Message List */}
         <ChatMessageList ref={messagesContainerRef}>
           <AnimatePresence>
             {messages.map((message, index) => {
@@ -294,6 +315,7 @@ export const Chat = () => {
           </AnimatePresence>
         </ChatMessageList>
       </div>
+      {/* Chat Input Form */}
       <form
         ref={formRef}
         onSubmit={onSubmit}
