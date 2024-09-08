@@ -62,7 +62,6 @@ export const Chat = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setIsGenerating(true);
     // return if inputMessage is empty
     if (!inputMessage?.trim()) return;
     const userMessage: ChatMessage = {
@@ -74,7 +73,8 @@ export const Chat = () => {
       setMessages((prevMessages) => [...prevMessages, userMessage]);
       setInputMessage("");
       setIsLoading(true);
-      
+      setIsGenerating(true);
+
       // Reset the form
       if (formRef.current) {
         formRef.current.reset();
@@ -133,6 +133,7 @@ export const Chat = () => {
         setMessages((prevMessages) => [...prevMessages, errorMessage]);
       } finally {
         setIsLoading(false);
+        setIsGenerating(false);
       }
 
   };
@@ -187,6 +188,7 @@ export const Chat = () => {
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
+        console.log(isGenerating, isLoading, inputMessage);
       e.preventDefault();
       if (isGenerating || isLoading || !inputMessage) return;
       setIsGenerating(true);
