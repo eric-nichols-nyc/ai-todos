@@ -284,6 +284,5 @@ export const Chat = () => {
         </Button>
       </form>
     </div>
-    </div>
   );
 };
