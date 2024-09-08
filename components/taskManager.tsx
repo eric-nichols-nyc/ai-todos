@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import dynamic from 'next/dynamic';
 import {
   Card,
@@ -26,6 +26,7 @@ const TaskManager: React.FC = () => {
   const [newTask, setNewTask] = useState<string>("");
   const [newPriority, setNewPriority] = useState<"high" | "medium" | "low">("medium");
   const [isClientSide, setIsClientSide] = useState(false);
+  const cardContentRef = useRef<HTMLDivElement>(null);
   const {
     tasks,
     isLoading,
@@ -43,6 +44,12 @@ const TaskManager: React.FC = () => {
     setIsClientSide(true);
     fetchTasks();
   }, [fetchTasks]);
+
+  useEffect(() => {
+    if (cardContentRef.current) {
+      cardContentRef.current.scrollTop = cardContentRef.current.scrollHeight;
+    }
+  }, [tasks]);
 
   const handleAddTask = async () => {
     if (!newTask.trim()) return;
@@ -76,7 +83,7 @@ const TaskManager: React.FC = () => {
       <CardHeader>
         <h2 className="text-2xl font-bold">Task Manager</h2>
       </CardHeader>
-      <CardContent className="flex-grow overflow-auto">
+      <CardContent ref={cardContentRef} className="flex-grow overflow-auto">
         <div className="space-y-4">
           <div className="flex space-x-2">
             <Input
