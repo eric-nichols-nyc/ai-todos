@@ -62,8 +62,22 @@ export const Chat = () => {
   // Scroll to bottom of messages when new messages are added
   useEffect(() => {
     if (messagesContainerRef.current) {
-        messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+      const scrollContainer = messagesContainerRef.current;
+      scrollContainer.scrollTop = scrollContainer.scrollHeight;
     }
+  }, [messages]);
+
+  // Ensure scroll to bottom after DOM update
+  useEffect(() => {
+    const scrollToBottom = () => {
+      if (messagesContainerRef.current) {
+        const scrollContainer = messagesContainerRef.current;
+        scrollContainer.scrollTop = scrollContainer.scrollHeight;
+      }
+    };
+
+    // Use requestAnimationFrame to ensure the scroll happens after the DOM update
+    requestAnimationFrame(scrollToBottom);
   }, [messages]);
 
   // Handle form submission
@@ -248,7 +262,7 @@ export const Chat = () => {
         )}
 
         {/* Chat Message List */}
-        <ChatMessageList ref={messagesContainerRef}>
+        <ChatMessageList ref={messagesContainerRef} className="h-[calc(100vh-200px)] overflow-y-auto">
           <AnimatePresence>
             {messages.map((message, index) => {
               const variant = getMessageVariant(message.role!);
