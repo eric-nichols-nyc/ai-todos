@@ -80,8 +80,10 @@ export async function POST(req: Request) {
         newTasks.push(newTask);
       }
       
-      const taskList = suggestedTasks.map((task:Task) => `"${task.task}"`).join(", ");
-      const responseMessage = `Certainly! I've added the following tasks to your list: ${taskList}. Is there anything else you'd like me to do?`;
+      const taskList = suggestedTasks.map((task:Task) => `"${task.task}"`);
+      const responseMessage = suggestedTasks.length > 1
+        ? `Certainly! I've added the following tasks to your list:\n${taskList.map(task => `- ${task}`).join('\n')}\nIs there anything else you'd like me to do?`
+        : `Certainly! I've added the following task to your list: ${taskList[0]}. Is there anything else you'd like me to do?`;
       
       return NextResponse.json({
         message: responseMessage,
