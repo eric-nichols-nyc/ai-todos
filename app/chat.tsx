@@ -62,80 +62,93 @@ export const Chat = () => {
 
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // return if inputMessage is empty
     if (!inputMessage?.trim()) return;
-    const userMessage: ChatMessage = {
-        id: Date.now(),
-        message: inputMessage,
-        role: "user",
-      };
 
-      setMessages((prevMessages) => [...prevMessages, userMessage]);
-      setInputMessage("");
-      setIsLoading(true);
-      setIsGenerating(true);
+    const userMessage = createUserMessage(inputMessage);
+    addMessageToChat(userMessage);
+    resetInputAndForm();
 
-      // Reset the form
-      if (formRef.current) {
-        formRef.current.reset();
-      }
-      try {
-        const response = await fetch("/api/tasks", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ message: inputMessage }),
-        });
-  
-        if (!response.ok) throw new Error("Failed to get AI response");
-  
-        const data = await response.json();
-  
-        const aiMessage: ChatMessage = {
-          id: Date.now() + 1,
-          message: data.message,
-          role: "ai",
-          suggestedTask: data.suggestedTask,
-        };
+    setIsLoading(true);
+    setIsGenerating(true);
 
-        console.log('aiMessage:', aiMessage);
-  
-        setMessages((prevMessages) => [...prevMessages, aiMessage]);
-  
-        if (
-          inputMessage.toLowerCase().startsWith("update task") ||
-          inputMessage.toLowerCase().startsWith("change task")
-        ) {
-          console.log("update task");
-          handleUpdate(inputMessage);
-        }
-  
-        if (data.newTasks && data.newTasks.length > 0) {
-          console.log("data:", data.newTasks);
-          const newTasks = [];
-          for (const task of data.newTasks) {
-            console.log(task);
-            const newTask = addNewTask(task.task, task.priority || "medium");
-            newTasks.push(newTask);
-          }
-        } else if (
-          inputMessage.toLowerCase().includes("delete task") ||
-          inputMessage.toLowerCase().includes("remove task")
-        ) {
-          await handleTaskOperation(inputMessage);
-        }
-      } catch (error) {
-        console.error("Error sending message:", error);
-        const errorMessage: ChatMessage = {
-          id: Date.now() + 1,
-          message: "Sorry, I encountered an error. Please try again.",
-          role: "ai",
-        };
-        setMessages((prevMessages) => [...prevMessages, errorMessage]);
-      } finally {
-        setIsLoading(false);
-        setIsGenerating(false);
-      }
+    try {
+      const data = await sendMessageToAPI(inputMessage);
+      const aiMessage = createAIMessage(data);
+      addMessageToChat(aiMessage);
 
+      await handleTaskOperations(inputMessage, data);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+      setIsGenerating(false);
+    }
+  };
+
+  const createUserMessage = (message: string): ChatMessage => ({
+    id: Date.now(),
+    message,
+    role: "user",
+  });
+
+  const createAIMessage = (data: any): ChatMessage => ({
+    id: Date.now() + 1,
+    message: data.message,
+    role: "ai",
+    suggestedTask: data.suggestedTask,
+  });
+
+  const addMessageToChat = (message: ChatMessage) => {
+    setMessages((prevMessages) => [...prevMessages, message]);
+  };
+
+  const resetInputAndForm = () => {
+    setInputMessage("");
+    if (formRef.current) {
+      formRef.current.reset();
+    }
+  };
+
+  const sendMessageToAPI = async (message: string) => {
+    const response = await fetch("/api/tasks", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message }),
+    });
+
+    if (!response.ok) throw new Error("Failed to get AI response");
+
+    return response.json();
+  };
+
+  const handleTaskOperations = async (inputMessage: string, data: any) => {
+    if (inputMessage.toLowerCase().startsWith("update task") ||
+        inputMessage.toLowerCase().startsWith("change task")) {
+      await handleUpdate(inputMessage);
+    }
+
+    if (data.newTasks && data.newTasks.length > 0) {
+      await handleNewTasks(data.newTasks);
+    } else if (inputMessage.toLowerCase().includes("delete task") ||
+               inputMessage.toLowerCase().includes("remove task")) {
+      await handleTaskOperation(inputMessage);
+    }
+  };
+
+  const handleNewTasks = async (newTasks: any[]) => {
+    for (const task of newTasks) {
+      await addNewTask(task.task, task.priority || "medium");
+    }
+  };
+
+  const handleError = (error: any) => {
+    console.error("Error sending message:", error);
+    const errorMessage: ChatMessage = {
+      id: Date.now() + 1,
+      message: "Sorry, I encountered an error. Please try again.",
+      role: "ai",
+    };
+    addMessageToChat(errorMessage);
   };
 
   const handleUpdate = async (message: string) => {
