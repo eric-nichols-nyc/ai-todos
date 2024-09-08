@@ -194,7 +194,7 @@ export const Chat = () => {
 
   return (
     <div className="h-[calc(100dvh)] flex flex-col">
-      <div className="flex-grow overflow-y-auto bg-red-300 pb-5">
+      <div className="flex-grow overflow-y-auto bg-red-300">
         <ChatMessageList ref={messagesContainerRef}>
           <AnimatePresence>
             {messages.map((message, index) => {
@@ -263,7 +263,7 @@ export const Chat = () => {
       <form
         ref={formRef}
         onSubmit={onSubmit}
-        className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring flex-shrink-0"
+        className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring flex-shrink-0 mb-5"
       >
         <ChatInput
           ref={inputRef}
