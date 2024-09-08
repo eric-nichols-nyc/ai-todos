@@ -193,11 +193,9 @@ export const Chat = () => {
   const getMessageVariant = (role: string) => role === "ai" ? "received" : "sent";
 
   return (
-    <div className="h-[calc(100dvh)]">
-    <div className="flex flex-col h-full">
-   
-        <div className="bg-red-300 h-full overscroll-y-auto">
-           <ChatMessageList ref={messagesContainerRef}>
+    <div className="h-[calc(100dvh)] flex flex-col">
+      <div className="flex-grow overflow-y-auto bg-red-300">
+        <ChatMessageList ref={messagesContainerRef}>
           <AnimatePresence>
             {messages.map((message, index) => {
               const variant = getMessageVariant(message.role!);
@@ -261,11 +259,11 @@ export const Chat = () => {
             })}
           </AnimatePresence>
         </ChatMessageList>
-        </div>
+      </div>
       <form
         ref={formRef}
         onSubmit={onSubmit}
-        className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring"
+        className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring flex-shrink-0"
       >
         <ChatInput
           ref={inputRef}
