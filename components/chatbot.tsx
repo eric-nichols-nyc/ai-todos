@@ -107,7 +107,7 @@ export default function Chatbot() {
     if (option.action) {
       option.action();
     } else {
-      setInputMessage(option.label, () => {
+      setInputMessageWithCallback(option.label, () => {
         handleSubmit();
       });
     }
