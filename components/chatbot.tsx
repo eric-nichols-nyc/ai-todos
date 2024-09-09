@@ -53,11 +53,12 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const handleSubmit = async (message:string) => {
-    console.log('handleSubmit', message);
+  const handleSubmit = async (message?: string) => {
+    const currentInputMessage = message || inputMessage;
+    if (!currentInputMessage?.trim()) return;
+    console.log('handleSubmit', currentInputMessage);
 
-    createUserMessage(message);
-    const currentInputMessage = message;
+    createUserMessage(currentInputMessage);
     resetInputAndForm();
 
     setIsLoading(true);
@@ -66,8 +67,8 @@ export default function Chatbot() {
     try {
       const data = await sendMessageToAPI(currentInputMessage);
       const aiMessage = createAIMessage(data);
-      const message = removeQuotesFromList(aiMessage.message);
-      aiMessage.message = message;
+      const formattedMessage = removeQuotesFromList(aiMessage.message);
+      aiMessage.message = formattedMessage;
       addMessageToChat(aiMessage);
 
       await handleTaskOperations(currentInputMessage, data);
@@ -100,35 +101,7 @@ export default function Chatbot() {
     if (option.action) {
       option.action();
     } else {
-      //setInputMessage(option.label);
       handleSubmit(option.label);
-    }
-  };
-
-  const onSubmit = async () => {
-    if (!inputMessage?.trim()) return;
-    console.log('onSubmit')
-
-    createUserMessage(inputMessage);
-    const currentInputMessage = inputMessage;
-    resetInputAndForm();
-
-    setIsLoading(true);
-    setIsGenerating(true);
-
-    try {
-      const data = await sendMessageToAPI(currentInputMessage);
-      const aiMessage = createAIMessage(data);
-      const message = removeQuotesFromList(aiMessage.message);
-      aiMessage.message = message;
-      addMessageToChat(aiMessage);
-
-      await handleTaskOperations(currentInputMessage, data);
-    } catch (error) {
-      handleError(error);
-    } finally {
-      setIsLoading(false);
-      setIsGenerating(false);
     }
   };
 
@@ -424,7 +397,7 @@ export default function Chatbot() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            onSubmit();
+            handleSubmit();
           }}
           className="flex w-full items-center space-x-2"
         >
