@@ -83,6 +83,7 @@ export const Chat = () => {
 
     const userMessage = createUserMessage(inputMessage);
     addMessageToChat(userMessage);
+    console.log(0)
     resetInputAndForm();
 
     setIsLoading(true);
@@ -92,6 +93,7 @@ export const Chat = () => {
       const data = await sendMessageToAPI(inputMessage);
       const aiMessage = createAIMessage(data);
       addMessageToChat(aiMessage);
+      console.log(1)
 
       await handleTaskOperations(inputMessage, data);
     } catch (error) {
