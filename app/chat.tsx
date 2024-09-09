@@ -7,7 +7,6 @@ import {
 } from "@/components/ui/chat";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useState, useRef, useEffect } from "react";
-import { AnimatePresence, motion } from "framer-motion";
 import { ChatInput } from "@/components/ui/chat/chat-input";
 import { Button } from "@/components/ui/button";
 import { useTasks } from "@/hooks/useTasks";
@@ -264,27 +263,10 @@ export const Chat = () => {
 
         {/* Chat Message List */}
         <ChatMessageList ref={messagesContainerRef} className="flex-1 overflow-y-auto">
-          <AnimatePresence>
-            {messages.map((message, index) => {
-              const variant = getMessageVariant(message.role!);
-              return (
-                <motion.div
-                  key={index}
-                  layout
-                  initial={{ opacity: 0, scale: 1, y: 50, x: 0 }}
-                  animate={{ opacity: 1, scale: 1, y: 0, x: 0 }}
-                  exit={{ opacity: 0, scale: 1, y: 1, x: 0 }}
-                  transition={{
-                    opacity: { duration: 0.1 },
-                    layout: {
-                      type: "spring",
-                      bounce: 0.3,
-                      duration: index * 0.05 + 0.2,
-                    },
-                  }}
-                  style={{ originX: 0.5, originY: 0.5 }}
-                  className="flex flex-col gap-2 p-4"
-                >
+          {messages.map((message, index) => {
+            const variant = getMessageVariant(message.role!);
+            return (
+              <div key={index} className="flex flex-col gap-2 p-4">
                   <ChatBubble key={index} variant={variant}>
                     <Avatar>
                       {message.role === "user" ? (
@@ -334,10 +316,9 @@ export const Chat = () => {
                       )}
                     </ChatBubbleMessage>
                   </ChatBubble>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+              </div>
+            );
+          })}
         </ChatMessageList>
       </div>
       {/* Chat Input Form */}
