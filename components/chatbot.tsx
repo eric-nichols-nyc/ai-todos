@@ -14,6 +14,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SendIcon } from "lucide-react";
 import { useTasks } from "@/hooks/useTasks";
 import ReactMarkdown from "react-markdown";
+import { Task } from "@/types";
 
 type Message = {
   id: number;
