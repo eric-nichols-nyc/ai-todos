@@ -83,7 +83,7 @@ const TaskManager: React.FC = () => {
       <CardHeader>
         <h2 className="text-2xl font-bold">Task Manager</h2>
       </CardHeader>
-      <CardContent ref={cardContentRef} className="flex-grow overflow-auto">
+      <CardContent ref={cardContentRef} className="flex-grow overflow-auto p-4 space-y-4">
         <div className="space-y-4">
           <div className="flex space-x-2">
             <Input
@@ -128,15 +128,16 @@ const TaskManager: React.FC = () => {
           </Select> */}
           <ul className="space-y-2">
             {tasks.map((task: Task) => (
-              <TaskListItem
-                key={task.id}
-                id={task.id}
-                task={task.task}
-                priority={task.priority || 'medium'}
-                completed={task.completed || false}
-                onUpdate={(id, updatedTask) => handleUpdateTask(id, updatedTask as Partial<Task>)}
-                onDelete={removeTask}
-              />
+              <li key={task.id} className="bg-white rounded-lg shadow-sm p-4">
+                <TaskListItem
+                  id={task.id}
+                  task={task.task}
+                  priority={task.priority || 'medium'}
+                  completed={task.completed || false}
+                  onUpdate={(id, updatedTask) => handleUpdateTask(id, updatedTask as Partial<Task>)}
+                  onDelete={removeTask}
+                />
+              </li>
             ))}
           </ul>
         </div>
