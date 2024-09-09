@@ -86,3 +86,42 @@ To learn more about the technologies used in this project, check out the followi
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out the [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+# AI-Powered Task Management System
+
+This Next.js application demonstrates an AI-powered task management system. It combines a task list interface with a chatbot, allowing users to manage tasks through natural language interactions.
+
+## Features
+
+- Task management with add, update, and remove functionality
+- AI-powered chatbot for natural language task interactions
+- Real-time task list updates
+- Responsive design for various screen sizes
+
+## Technologies Used
+
+- Next.js
+- React
+- TypeScript
+- OpenAI API
+- shadcn/ui components
+- Vercel AI SDK
+
+## Getting Started
+
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Set up your OpenAI API key in the environment variables
+4. Run the development server: `npm run dev`
+5. Open [http://localhost:3000](http://localhost:3000) in your browser
+
+## Screenshot
+
+![AI Task Manager Screenshot](public/ai-task-manager-screenshot.png)
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## License
+
+This project is licensed under the MIT License.
