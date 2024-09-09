@@ -263,7 +263,7 @@ export default function Chatbot() {
       e.preventDefault();
       if (isGenerating || isLoading || !inputMessage) return;
       setIsGenerating(true);
-      onSubmit();
+      handleSubmit();
     }
   };
 
