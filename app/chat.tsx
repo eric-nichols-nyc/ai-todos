@@ -301,7 +301,7 @@ export const Chat = () => {
                           <div className="mt-2">
                             <h4 className="text-sm font-semibold">Suggested Task:</h4>
                             <ul className="list-disc list-inside">
-                              <li>{message.suggestedTask}</li>
+                              <li className="font-bold">{message.suggestedTask}</li>
                             </ul>
                           </div>
                         )}
