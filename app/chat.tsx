@@ -104,12 +104,16 @@ export const Chat = () => {
     }
   };
 
-  // Create a user message object
-  const createUserMessage = (message: string): ChatMessage => ({
-    id: Date.now(),
-    message,
-    role: "user",
-  });
+  // Create a user message object and add it to the chat
+  const createUserMessage = (message: string): ChatMessage => {
+    const userMessage: ChatMessage = {
+      id: Date.now(),
+      message,
+      role: "user",
+    };
+    addMessageToChat(userMessage);
+    return userMessage;
+  };
 
   // Create an AI message object
   const createAIMessage = (data: any): ChatMessage => ({
