@@ -342,9 +342,8 @@ export const Chat = () => {
         </ChatMessageList>
       </div>
       {/* Chat Input Form */}
-      <form
+      <div
         ref={formRef}
-        onSubmit={() => {onSubmit;   createUserMessage();}}
         className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring flex-shrink-0"
       >
         <div className="flex items-center p-2">
@@ -358,7 +357,11 @@ export const Chat = () => {
           />
           <Button
             disabled={!inputMessage || isLoading}
-            type="submit"
+            onClick={(e) => {
+              e.preventDefault();
+              onSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
+              createUserMessage();
+            }}
             size="sm"
             className="absolute right-4 bottom-4 gap-1.5"
           >
@@ -366,7 +369,7 @@ export const Chat = () => {
             <CornerDownLeft className="size-3.5" />
           </Button>
         </div>
-      </form>
+      </div>
     </div>
   );
 };
