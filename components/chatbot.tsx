@@ -53,7 +53,7 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const onSubmit = async () => {
+  const handleSubmit = async () => {
     if (!inputMessage?.trim()) return;
 
     createUserMessage(inputMessage);
@@ -101,7 +101,7 @@ export default function Chatbot() {
       option.action();
     } else {
       setInputMessage(option.label);
-      onSubmit();
+      handleSubmit();
     }
   };
 
@@ -423,7 +423,7 @@ export default function Chatbot() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            onSubmit();
+            handleSubmit();
           }}
           className="flex w-full items-center space-x-2"
         >
