@@ -382,18 +382,20 @@ export default function Chatbot() {
         <div ref={messagesEndRef} />
       </CardContent>
       <CardFooter className="border-t flex-col space-y-4">
-        <div className="flex flex-wrap gap-2 w-full">
-          {quickTaskOptions.map((option, index) => (
-            <Button
-              key={index}
-              variant="outline"
-              size="sm"
-              onClick={() => handleQuickTask(option)}
-            >
-              {option.label}
-            </Button>
-          ))}
-        </div>
+        {messages.length === 0 && (
+          <div className="flex flex-wrap gap-2 w-full">
+            {quickTaskOptions.map((option, index) => (
+              <Button
+                key={index}
+                variant="outline"
+                size="sm"
+                onClick={() => handleQuickTask(option)}
+              >
+                {option.label}
+              </Button>
+            ))}
+          </div>
+        )}
         <form
           onSubmit={(e) => {
             e.preventDefault();
