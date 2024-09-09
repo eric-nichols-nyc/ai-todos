@@ -34,6 +34,12 @@ export default function Chatbot() {
   const { tasks, addNewTask, updateTask, removeTask } = useTasks();
   // State management
   const [inputMessage, setInputMessage] = useState<string>("");
+  const setInputMessageWithCallback = (message: string, callback?: () => void) => {
+    setInputMessage(message);
+    if (callback) {
+      setTimeout(callback, 0);
+    }
+  };
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -101,11 +107,9 @@ export default function Chatbot() {
     if (option.action) {
       option.action();
     } else {
-      setInputMessage(option.label);
-      setTimeout(() => {
+      setInputMessage(option.label, () => {
         handleSubmit();
-      },0);
-      // handleSubmit();
+      });
     }
   };
 
@@ -180,7 +184,7 @@ export default function Chatbot() {
 
   // Reset input and form after submission
   const resetInputAndForm = () => {
-    setInputMessage("");
+    setInputMessageWithCallback("");
     if (formRef.current) {
       formRef.current.reset();
     }
@@ -436,7 +440,7 @@ export default function Chatbot() {
             type="text"
             placeholder="Type your message..."
             value={inputMessage}
-            onChange={(e) => setInputMessage(e.target.value)}
+            onChange={(e) => setInputMessageWithCallback(e.target.value)}
             className="flex-grow"
           />
           <Button type="submit" size="icon">
