@@ -1,6 +1,7 @@
 import ChatInterface from "@/components/chatInterface";
 import TaskManager from "@/components/taskManager";
 import {Chat} from './chat'
+import Chatbot from "@/components/chatbot";
 export default function Home() {
   return (
     <div className="flex justify-center items-start min-h-screen bg-gray-100 p-4">
@@ -9,7 +10,7 @@ export default function Home() {
           <TaskManager />
         </div>
         <div className="w-1/2 h-full">
-          <Chat />
+          <Chatbot />
         </div>
       </div>
     </div>
