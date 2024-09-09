@@ -55,7 +55,7 @@ const TaskManager: React.FC = () => {
     if (!newTask.trim()) return;
     try {
       const newTaskObject = {
-        id: Date.now().toString(), // Generate a temporary ID
+        id: Date.now().toString(),
         task: newTask,
         priority: newPriority,
         completed: false,
@@ -67,7 +67,6 @@ const TaskManager: React.FC = () => {
       setNewPriority("medium");
     } catch (error) {
       console.error("Failed to add task:", error);
-      // Optionally, you can show an error message to the user here
     }
   };
 
@@ -75,15 +74,15 @@ const TaskManager: React.FC = () => {
     updateTask(id, updatedTask);
   };
 
-  if (!isClientSide || isLoading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  if (!isClientSide || isLoading) return <div className="flex items-center justify-center h-full">Loading...</div>;
+  if (error) return <div className="flex items-center justify-center h-full text-red-500">Error: {error}</div>;
 
   return (
-    <Card className="w-full h-full flex flex-col">
-      <CardHeader>
+    <Card className="w-full h-full flex flex-col shadow-lg">
+      <CardHeader className="bg-primary text-primary-foreground">
         <h2 className="text-2xl font-bold">Task Manager</h2>
       </CardHeader>
-      <CardContent ref={cardContentRef} className="flex-grow overflow-auto p-4 space-y-4">
+      <CardContent ref={cardContentRef} className="flex-grow overflow-auto p-4 space-y-4 scrollbar-hide">
         <div className="space-y-4">
           <div className="flex space-x-2">
             <Input
@@ -108,24 +107,8 @@ const TaskManager: React.FC = () => {
                 <SelectItem value="high">High</SelectItem>
               </SelectContent>
             </Select>
-            <Button onClick={handleAddTask}>Add</Button>
+            <Button onClick={handleAddTask} className="bg-accent text-accent-foreground hover:bg-accent/90">Add</Button>
           </div>
-          {/* <Select
-            value={filter}
-            onValueChange={(value: "all" | "high" | "medium" | "low") =>
-              setFilter(value)
-            }
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Filter tasks" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All</SelectItem>
-              <SelectItem value="low">Low Priority</SelectItem>
-              <SelectItem value="medium">Medium Priority</SelectItem>
-              <SelectItem value="high">High Priority</SelectItem>
-            </SelectContent>
-          </Select> */}
           <ul className="space-y-2">
             {tasks.map((task: Task) => (
                 <TaskListItem
@@ -141,8 +124,8 @@ const TaskManager: React.FC = () => {
           </ul>
         </div>
       </CardContent>
-      <CardFooter>
-        <p className="text-sm text-gray-500">Total tasks: {tasks.length}</p>
+      <CardFooter className="bg-secondary">
+        <p className="text-sm text-secondary-foreground">Total tasks: {tasks.length}</p>
       </CardFooter>
     </Card>
   );

@@ -170,19 +170,19 @@ const ChatInterface: React.FC = () => {
   };
 
   return (
-    <Card className="w-full h-[calc(100vh-2rem)] flex flex-col">
-      <CardHeader>
+    <Card className="w-full h-[calc(100vh-3rem)] flex flex-col shadow-lg">
+      <CardHeader className="bg-primary text-primary-foreground">
         <h2 className="text-2xl font-bold">Chat with AI Assistant</h2>
       </CardHeader>
-      <CardContent className="flex-grow overflow-hidden">
-        <ScrollArea className="h-full pr-4" ref={scrollAreaRef}>
+      <CardContent className="flex-grow overflow-hidden p-4">
+        <ScrollArea className="h-full pr-4 scrollbar-hide" ref={scrollAreaRef}>
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`mb-4 p-2 rounded-lg text-sm ${
+              className={`mb-4 p-3 rounded-lg text-sm ${
                 message.sender === "user"
-                  ? "bg-blue-100 ml-auto"
-                  : "bg-gray-100"
+                  ? "bg-accent text-accent-foreground ml-auto"
+                  : "bg-secondary text-secondary-foreground"
               } max-w-[80%] ${
                 message.sender === "user" ? "text-right" : "text-left"
               }`}
@@ -191,11 +191,11 @@ const ChatInterface: React.FC = () => {
             </div>
           ))}
           {isLoading && (
-            <div className="text-center text-gray-500">AI is thinking...</div>
+            <div className="text-center text-muted-foreground">AI is thinking...</div>
           )}
         </ScrollArea>
       </CardContent>
-      <CardFooter className="flex-col items-stretch space-y-4">
+      <CardFooter className="flex-col items-stretch space-y-4 bg-secondary p-4">
         <QuickOptions
           options={quickOptions}
           onOptionClick={handleOptionClick}
@@ -214,7 +214,7 @@ const ChatInterface: React.FC = () => {
             placeholder="Type your message..."
             className="flex-grow"
           />
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" disabled={isLoading} className="bg-accent text-accent-foreground hover:bg-accent/90">
             Send
           </Button>
         </form>
