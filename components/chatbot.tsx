@@ -100,16 +100,8 @@ export default function Chatbot() {
   const handleQuickTask = (option: { label: string; task?: string; priority?: string; action?: () => void }) => {
     if (option.action) {
       option.action();
-    } else if (option.task && option.priority) {
-      const newTask: Task = {
-        id: Date.now().toString(),
-        task: option.task,
-        priority: option.priority as "high" | "medium" | "low",
-        completed: false,
-        created_at: new Date().toISOString(),
-      };
-      addNewTask(newTask);
-      createUserMessage(`Added task: ${option.label}`);
+    } else {
+      setInputMessage(option.label);
     }
     onSubmit();
   };
