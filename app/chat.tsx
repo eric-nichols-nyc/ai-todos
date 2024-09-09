@@ -295,9 +295,19 @@ export const Chat = () => {
                       isLoading={isLoading}
                       variant={variant}
                     >
-                      {message.message}
+                      <div className="prose dark:prose-invert">
+                        {message.message}
+                        {message.role === "ai" && message.suggestedTask && (
+                          <div className="mt-2">
+                            <h4 className="text-sm font-semibold">Suggested Task:</h4>
+                            <ul className="list-disc list-inside">
+                              <li>{message.suggestedTask}</li>
+                            </ul>
+                          </div>
+                        )}
+                      </div>
                       {message.role === "ai" && (
-                        <div className="flex items-center mt-1.5 gap-1">
+                        <div className="flex items-center mt-3 gap-1">
                           {!isLoading && (
                             <>
                               {ChatAiIcons.map((icon, index) => {
