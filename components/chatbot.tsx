@@ -54,27 +54,6 @@ export default function Chatbot() {
 
   const onSubmit = async () => {
     if (inputMessage?.trim() === "") return;
-
-    // const newMessage: Message = {
-    //   id: Date.now(),
-    //   text: inputMessage,
-    //   sender: 'user'
-    // }
-
-    // setMessages(prevMessages => [...prevMessages, newMessage])
-    // setInputMessage('')
-    // setIsTyping(true)
-
-    // // Simulate bot response
-    // setTimeout(() => {
-    //   const botMessage: Message = {
-    //     id: Date.now(),
-    //     text: 'Thank you for your message. How can I assist you further?',
-    //     sender: 'bot'
-    //   }
-    //   setMessages(prevMessages => [...prevMessages, botMessage])
-    //   setIsTyping(false)
-    // }, 2000)
     if (!inputMessage?.trim()) return;
 
     createUserMessage(inputMessage);
@@ -279,7 +258,7 @@ export default function Chatbot() {
         <div className="ml-4">
           <h2 className="text-lg font-semibold">Chatbot</h2>
           <p className="text-sm text-muted-foreground">
-            Let me help you with you taks
+            Let me help you with your tasks
           </p>
         </div>
       </CardHeader>
@@ -287,7 +266,7 @@ export default function Chatbot() {
         {/* Initial Message */}
         {messages.length === 0 && (
           <div className="w-full bg-background shadow-sm border rounded-lg p-8 flex flex-col gap-2">
-            <h1 className="font-bold">Welcome to this AI todo app.</h1>
+            <h1 className="font-bold">Welcome to the AI todo app.</h1>
             <p className="text-muted-foreground text-sm">
               This Next.js application demonstrates an AI-powered task
               management system. It combines a task list interface with a
@@ -355,21 +334,21 @@ export default function Chatbot() {
             </motion.div>
           ))}
         </AnimatePresence>
-        {isTyping && (
+        {isGenerating && (
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             className="flex justify-start mb-4"
           >
-            <div className="bg-muted rounded-lg p-3">
+            <div className="bg-muted rounded-lg p-3 text-xs">
               <motion.div
                 animate={{
                   scale: [1, 1.2, 1],
                   transition: { repeat: Infinity, duration: 0.6 },
                 }}
               >
-                Typing...
+                thinking...
               </motion.div>
             </div>
           </motion.div>
