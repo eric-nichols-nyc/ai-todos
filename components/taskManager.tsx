@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useRef } from "react";
 import dynamic from 'next/dynamic';
+import { motion, AnimatePresence } from "framer-motion";
 import {
   Card,
   CardHeader,
@@ -80,7 +81,7 @@ const TaskManager: React.FC = () => {
   return (
     <Card className="w-full h-full flex flex-col shadow-lg">
       <CardHeader className="bg-primary text-primary-foreground">
-        <h2 className="text-2xl font-bold">Task Manager</h2>
+        <h2 className="text-2xl font-bold">Tasks</h2>
       </CardHeader>
       <CardContent ref={cardContentRef} className="flex-grow overflow-auto p-4 space-y-4 scrollbar-hide">
         <div className="space-y-4">
@@ -109,19 +110,28 @@ const TaskManager: React.FC = () => {
             </Select>
             <Button onClick={handleAddTask} className="bg-accent text-accent-foreground hover:bg-accent/90">Add</Button>
           </div>
-          <ul className="space-y-2">
-            {tasks.map((task: Task) => (
-                <TaskListItem
-                  key={task.id} 
-                  id={task.id}
-                  task={task.task}
-                  priority={task.priority || 'medium'}
-                  completed={task.completed || false}
-                  onUpdate={(id, updatedTask) => handleUpdateTask(id, updatedTask as Partial<Task>)}
-                  onDelete={removeTask}
-                />
-            ))}
-          </ul>
+          <AnimatePresence>
+            <ul className="space-y-2">
+              {tasks.map((task: Task) => (
+                <motion.li
+                  key={task.id}
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: 10 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <TaskListItem
+                    id={task.id}
+                    task={task.task}
+                    priority={task.priority || 'medium'}
+                    completed={task.completed || false}
+                    onUpdate={(id, updatedTask) => handleUpdateTask(id, updatedTask as Partial<Task>)}
+                    onDelete={removeTask}
+                  />
+                </motion.li>
+              ))}
+            </ul>
+          </AnimatePresence>
         </div>
       </CardContent>
       <CardFooter className="bg-secondary">
