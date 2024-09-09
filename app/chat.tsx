@@ -234,11 +234,10 @@ export const Chat = () => {
   // Handle keydown events in the input field
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Enter" && !e.shiftKey) {
-        console.log(isGenerating, isLoading, inputMessage);
       e.preventDefault();
       if (isGenerating || isLoading || !inputMessage) return;
       setIsGenerating(true);
-      onSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
+      formRef.current?.requestSubmit();
     }
   };
 
