@@ -75,15 +75,15 @@ export const Chat = () => {
 
     return () => clearTimeout(timeoutId);
   }, [messages]);
-
-
+  
 
   // Handle form submission
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputMessage?.trim()) return;
 
-    //createUserMessage(inputMessage);
+    createUserMessage(inputMessage);
+ 
     resetInputAndForm();
 
     setIsLoading(true);
@@ -105,11 +105,10 @@ export const Chat = () => {
   };
 
   // Create a user message object and add it to the chat
-  const createUserMessage = () => {
-    if (!inputMessage?.trim()) return;
+  const createUserMessage = (message: string) => {
     const userMessage: ChatMessage = {
       id: Date.now(),
-      message: inputMessage,
+      message,
       role: "user",
     };
     setMessages((prevMessages) => [...prevMessages, userMessage]);
@@ -342,8 +341,9 @@ export const Chat = () => {
         </ChatMessageList>
       </div>
       {/* Chat Input Form */}
-      <div
+      <form
         ref={formRef}
+        onSubmit={() => {onSubmit}}
         className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring flex-shrink-0"
       >
         <div className="flex items-center p-2">
@@ -357,11 +357,7 @@ export const Chat = () => {
           />
           <Button
             disabled={!inputMessage || isLoading}
-            onClick={(e) => {
-              e.preventDefault();
-              onSubmit(e as unknown as React.FormEvent<HTMLFormElement>);
-              createUserMessage();
-            }}
+            type="submit"
             size="sm"
             className="absolute right-4 bottom-4 gap-1.5"
           >
@@ -369,7 +365,7 @@ export const Chat = () => {
             <CornerDownLeft className="size-3.5" />
           </Button>
         </div>
-      </div>
+      </form>
     </div>
   );
 };
