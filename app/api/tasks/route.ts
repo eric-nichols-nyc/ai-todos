@@ -27,7 +27,8 @@ export async function POST(req: Request) {
     const completion = await openai.chat.completions.create({
       model: "gpt-3.5-turbo",
       messages: [
-        { role: "system", content: "You are a helpful assistant that manages a task list. If the user provides a high level task, suggest a list of more specific tasks related to it. If the user asks to add a specific task, suggest it in your response." },
+        { role: "system", content: "You are a helpful assistant that manages a task list. If the user provides a high level task, suggest a list of more specific tasks related to it. If the user asks to add a specific task, suggest it in your response." 
+          + "Please provide your response in the form of a numbered or bulleted list. like this: 1.[Task one] 2[Task two] 3[Task three]" },
         { role: "user", content: `Current tasks: ${JSON.stringify(tasks)}. User message: ${message}` }
       ],
       functions: [

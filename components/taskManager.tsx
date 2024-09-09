@@ -128,8 +128,8 @@ const TaskManager: React.FC = () => {
           </Select> */}
           <ul className="space-y-2">
             {tasks.map((task: Task) => (
-              <li key={task.id} className="bg-white rounded-lg shadow-sm p-4">
                 <TaskListItem
+                  key={task.id} 
                   id={task.id}
                   task={task.task}
                   priority={task.priority || 'medium'}
@@ -137,7 +137,6 @@ const TaskManager: React.FC = () => {
                   onUpdate={(id, updatedTask) => handleUpdateTask(id, updatedTask as Partial<Task>)}
                   onDelete={removeTask}
                 />
-              </li>
             ))}
           </ul>
         </div>
