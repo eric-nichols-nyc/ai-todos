@@ -55,6 +55,7 @@ export default function Chatbot() {
 
   const handleSubmit = async () => {
     if (!inputMessage?.trim()) return;
+    console.log('handleSubmit', inputMessage);
 
     createUserMessage(inputMessage);
     const currentInputMessage = inputMessage;
@@ -101,12 +102,16 @@ export default function Chatbot() {
       option.action();
     } else {
       setInputMessage(option.label);
-      handleSubmit();
+      setTimeout(() => {
+        handleSubmit();
+      },0);
+      // handleSubmit();
     }
   };
 
   const onSubmit = async () => {
     if (!inputMessage?.trim()) return;
+    console.log('onSubmit')
 
     createUserMessage(inputMessage);
     const currentInputMessage = inputMessage;
