@@ -324,7 +324,7 @@ export const Chat = () => {
       {/* Chat Input Form */}
       <form
         ref={formRef}
-        onSubmit={() => {onSubmit}}
+        onSubmit={onSubmit}
         className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring flex-shrink-0"
       >
         <div className="flex items-center p-2">
