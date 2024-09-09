@@ -99,7 +99,14 @@ const ChatInterface: React.FC = () => {
         const newTasks = [];
         for (const task of data.newTasks) {
           console.log(task);
-          const newTask = addNewTask(task.task, task.priority || "medium");
+          const newTask: Task = {
+            id: Date.now().toString(),
+            task: task.task,
+            priority: task.priority || "medium",
+            completed: false,
+            created_at: new Date().toISOString(),
+          };
+          addNewTask(newTask);
           newTasks.push(newTask);
         }
       } else if (

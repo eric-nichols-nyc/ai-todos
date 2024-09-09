@@ -34,12 +34,6 @@ export default function Chatbot() {
   const { tasks, addNewTask, updateTask, removeTask } = useTasks();
   // State management
   const [inputMessage, setInputMessage] = useState<string>("");
-  const setInputMessageWithCallback = (message: string, callback?: () => void) => {
-    setInputMessage(message);
-    if (callback) {
-      setTimeout(callback, 0);
-    }
-  };
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
@@ -59,12 +53,11 @@ export default function Chatbot() {
     scrollToBottom();
   }, [messages, isTyping]);
 
-  const handleSubmit = async () => {
-    if (!inputMessage?.trim()) return;
-    console.log('handleSubmit', inputMessage);
+  const handleSubmit = async (message:string) => {
+    console.log('handleSubmit', message);
 
-    createUserMessage(inputMessage);
-    const currentInputMessage = inputMessage;
+    createUserMessage(message);
+    const currentInputMessage = message;
     resetInputAndForm();
 
     setIsLoading(true);
@@ -107,9 +100,8 @@ export default function Chatbot() {
     if (option.action) {
       option.action();
     } else {
-      setInputMessageWithCallback(option.label, () => {
-        handleSubmit();
-      });
+      //setInputMessage(option.label);
+      handleSubmit(option.label);
     }
   };
 
@@ -184,7 +176,7 @@ export default function Chatbot() {
 
   // Reset input and form after submission
   const resetInputAndForm = () => {
-    setInputMessageWithCallback("");
+    setInputMessage("");
     if (formRef.current) {
       formRef.current.reset();
     }
@@ -432,7 +424,7 @@ export default function Chatbot() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            handleSubmit();
+            onSubmit();
           }}
           className="flex w-full items-center space-x-2"
         >
@@ -440,7 +432,7 @@ export default function Chatbot() {
             type="text"
             placeholder="Type your message..."
             value={inputMessage}
-            onChange={(e) => setInputMessageWithCallback(e.target.value)}
+            onChange={(e) => setInputMessage(e.target.value)}
             className="flex-grow"
           />
           <Button type="submit" size="icon">
