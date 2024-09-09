@@ -350,7 +350,7 @@ export default function Chatbot() {
                   message.role === "user"
                     ? "bg-primary text-primary-foreground"
                     : "bg-muted"
-                }`}
+                } text-sm`}
               >
                 {/* <ReactMarkdown>{message.message}</ReactMarkdown> */}
                 <ReactMarkdown
@@ -376,7 +376,7 @@ export default function Chatbot() {
             exit={{ opacity: 0, y: -20 }}
             className="flex justify-start mb-4"
           >
-            <div className="bg-muted rounded-lg p-3 text-xs">
+            <div className="bg-muted rounded-lg p-2 text-xs">
               <motion.div
                 animate={{
                   scale: [1, 1.2, 1],
