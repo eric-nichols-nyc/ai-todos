@@ -76,14 +76,14 @@ export const Chat = () => {
     return () => clearTimeout(timeoutId);
   }, [messages]);
 
+
+
   // Handle form submission
   const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!inputMessage?.trim()) return;
 
-    const userMessage = createUserMessage(inputMessage);
-    addMessageToChat(userMessage);
-    console.log(0)
+    //createUserMessage(inputMessage);
     resetInputAndForm();
 
     setIsLoading(true);
@@ -105,14 +105,14 @@ export const Chat = () => {
   };
 
   // Create a user message object and add it to the chat
-  const createUserMessage = (message: string): ChatMessage => {
+  const createUserMessage = () => {
+    if (!inputMessage?.trim()) return;
     const userMessage: ChatMessage = {
       id: Date.now(),
-      message,
+      message: inputMessage,
       role: "user",
     };
-    addMessageToChat(userMessage);
-    return userMessage;
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
   };
 
   // Create an AI message object
@@ -344,7 +344,7 @@ export const Chat = () => {
       {/* Chat Input Form */}
       <form
         ref={formRef}
-        onSubmit={onSubmit}
+        onSubmit={() => {onSubmit;   createUserMessage();}}
         className="relative rounded-lg h-[86px] border bg-background focus-within:ring-1 focus-within:ring-ring flex-shrink-0"
       >
         <div className="flex items-center p-2">
