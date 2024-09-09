@@ -54,24 +54,23 @@ export default function Chatbot() {
   }, [messages, isTyping]);
 
   const onSubmit = async () => {
-    if (inputMessage?.trim() === "") return;
     if (!inputMessage?.trim()) return;
 
     createUserMessage(inputMessage);
-
+    const currentInputMessage = inputMessage;
     resetInputAndForm();
 
     setIsLoading(true);
     setIsGenerating(true);
 
     try {
-      const data = await sendMessageToAPI(inputMessage);
+      const data = await sendMessageToAPI(currentInputMessage);
       const aiMessage = createAIMessage(data);
       const message = removeQuotesFromList(aiMessage.message);
       aiMessage.message = message;
       addMessageToChat(aiMessage);
 
-      await handleTaskOperations(inputMessage, data);
+      await handleTaskOperations(currentInputMessage, data);
     } catch (error) {
       handleError(error);
     } finally {
@@ -102,8 +101,8 @@ export default function Chatbot() {
       option.action();
     } else {
       setInputMessage(option.label);
+      onSubmit();
     }
-    onSubmit();
   };
 
   function removeQuotesFromList(text: string) {
@@ -398,7 +397,9 @@ export default function Chatbot() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            onSubmit();
+            if (inputMessage.trim()) {
+              onSubmit();
+            }
           }}
           className="flex w-full items-center space-x-2"
         >
