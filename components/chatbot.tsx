@@ -105,6 +105,32 @@ export default function Chatbot() {
     }
   };
 
+  const onSubmit = async () => {
+    if (!inputMessage?.trim()) return;
+
+    createUserMessage(inputMessage);
+    const currentInputMessage = inputMessage;
+    resetInputAndForm();
+
+    setIsLoading(true);
+    setIsGenerating(true);
+
+    try {
+      const data = await sendMessageToAPI(currentInputMessage);
+      const aiMessage = createAIMessage(data);
+      const message = removeQuotesFromList(aiMessage.message);
+      aiMessage.message = message;
+      addMessageToChat(aiMessage);
+
+      await handleTaskOperations(currentInputMessage, data);
+    } catch (error) {
+      handleError(error);
+    } finally {
+      setIsLoading(false);
+      setIsGenerating(false);
+    }
+  };
+
   function removeQuotesFromList(text: string) {
     // Split the text into lines
     const lines = text.split("\n");
@@ -397,9 +423,7 @@ export default function Chatbot() {
         <form
           onSubmit={(e) => {
             e.preventDefault();
-            if (inputMessage.trim()) {
-              onSubmit();
-            }
+            onSubmit();
           }}
           className="flex w-full items-center space-x-2"
         >
