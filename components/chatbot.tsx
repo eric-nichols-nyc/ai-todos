@@ -80,9 +80,9 @@ export default function Chatbot() {
   };
 
   const quickTaskOptions = [
-    { label: "I need a haircut", action: () => addNewTask("Get a haircut", "medium") },
-    { label: "Buy groceries", action: () => addNewTask("Buy groceries", "high") },
-    { label: "Schedule dentist appointment", action: () => addNewTask("Schedule dentist appointment", "medium") },
+    { label: "I need a haircut", task: "Get a haircut", priority: "medium" },
+    { label: "Buy groceries", task: "Buy groceries", priority: "high" },
+    { label: "Schedule dentist appointment", task: "Schedule dentist appointment", priority: "medium" },
     { label: "Remove last task", action: () => removeLastTask() },
   ];
 
@@ -96,9 +96,20 @@ export default function Chatbot() {
     }
   };
 
-  const handleQuickTask = (option: { label: string; action: () => void }) => {
-    option.action();
-    createUserMessage(`Added task: ${option.label}`);
+  const handleQuickTask = (option: { label: string; task?: string; priority?: string; action?: () => void }) => {
+    if (option.action) {
+      option.action();
+    } else if (option.task && option.priority) {
+      const newTask: Task = {
+        id: Date.now().toString(),
+        task: option.task,
+        priority: option.priority as "high" | "medium" | "low",
+        completed: false,
+        created_at: new Date().toISOString(),
+      };
+      addNewTask(newTask);
+      createUserMessage(`Added task: ${option.label}`);
+    }
     onSubmit();
   };
 
